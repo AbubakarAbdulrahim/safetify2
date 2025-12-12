@@ -262,7 +262,7 @@ class OverviewPage extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Good Afternoon, $userName 👋', // Dynamic greeting logic could be added
+            '${_getGreeting()}, $userName 👋',
             style: const TextStyle(
               fontSize: 28,
               fontWeight: FontWeight.bold,
@@ -360,6 +360,17 @@ class OverviewPage extends StatelessWidget {
       case 'medical': return Icons.medical_services;
       case 'theft': return Icons.local_police;
       default: return Icons.report_problem;
+    }
+  }
+
+  String _getGreeting() {
+    final hour = DateTime.now().hour;
+    if (hour < 12) {
+      return 'Good Morning';
+    } else if (hour < 17) {
+      return 'Good Afternoon';
+    } else {
+      return 'Good Evening';
     }
   }
 }

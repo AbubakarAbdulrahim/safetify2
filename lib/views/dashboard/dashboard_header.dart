@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:go_router/go_router.dart';
 import '../../providers/auth_provider.dart';
 import '../../providers/theme_provider.dart';
+import '../../providers/incident_provider.dart';
 
 class DashboardHeader extends StatelessWidget {
   const DashboardHeader({super.key});
@@ -45,9 +46,21 @@ class DashboardHeader extends StatelessWidget {
                 ),
               ),
               const SizedBox(width: 8),
-              IconButton(
-                icon: const Icon(Icons.notifications),
-                onPressed: () {},
+              Consumer<IncidentProvider>(
+                builder: (context, incidentProvider, _) {
+                  final pendingCount = incidentProvider.incidents
+                      .where((i) => i.status == 'pending')
+                      .length;
+                  return Badge(
+                    label: Text(pendingCount.toString()),
+                    isLabelVisible: pendingCount > 0,
+                    backgroundColor: Colors.red,
+                    child: IconButton(
+                      icon: const Icon(Icons.notifications),
+                      onPressed: () => context.go('/incidents'),
+                    ),
+                  );
+                },
               ),
               const SizedBox(width: 16),
               PopupMenuButton<String>(

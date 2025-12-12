@@ -212,11 +212,34 @@ class _IncidentsPageState extends State<IncidentsPage> {
                                             icon: const Icon(Icons.cancel_outlined),
                                             color: Colors.red,
                                             tooltip: 'Reject',
-                                            onPressed: () {
-                                               if (admin != null) {
-                                                 incidentProvider.updateStatus(incident.id, 'rejected', admin.id, admin.name);
-                                                 ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Marked as Rejected')));
-                                               }
+                                            onPressed: () async {
+                                              if (admin != null) {
+                                                final confirm = await showDialog<bool>(
+                                                  context: context,
+                                                  builder: (context) => AlertDialog(
+                                                    title: const Text('Reject & Delete Incident'),
+                                                    content: const Text(
+                                                        'Are you sure you want to reject this incident? This will permanently delete it from the database.'),
+                                                    actions: [
+                                                      TextButton(
+                                                        onPressed: () => Navigator.pop(context, false),
+                                                        child: const Text('Cancel'),
+                                                      ),
+                                                      TextButton(
+                                                        onPressed: () => Navigator.pop(context, true),
+                                                        child: const Text('Delete', style: TextStyle(color: Colors.red)),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                );
+
+                                                if (confirm == true) {
+                                                  await incidentProvider.deleteIncident(incident.id, admin.id, admin.name);
+                                                  if (context.mounted) {
+                                                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('Incident Rejected & Deleted')));
+                                                  }
+                                                }
+                                              }
                                             },
                                           ),
                                         ]
