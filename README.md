@@ -66,7 +66,7 @@ State flows through `provider`, with each domain area (incidents, users, auth, d
 
 ## Related repo
 
-- Mobile client (resident-facing incident reporting app): *link to the mobile app repo here*
+- Mobile client (resident-facing incident reporting app): *https://github.com/AbubakarAbdulrahim/Safetify/tree/backend/users*
 
 ## Project background
 
